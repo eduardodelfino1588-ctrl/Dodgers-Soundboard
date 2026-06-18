@@ -21,16 +21,11 @@
     </style>
 </head>
 <body>
-
     <h1>⚾ Dodgers Walk-Up Soundboard ⚾</h1>
-    <p>Music tracks are permanently linked to GitHub files!</p>
-
     <div class="grid-container" id="roster-grid"></div>
-
     <div class="controls-bar">
         <button class="stop-btn" onclick="stopAll()">🛑 STOP MUSIC</button>
     </div>
-
     <script>
         const players = [
             { name: "Christian Agius", file: "The Hey Song-[AudioTrimmer.com].mp3" },
@@ -47,94 +42,20 @@
             { name: "Ronan Royiwsky", file: "Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3" },
             { name: "Benjamin Sam", file: "Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3" }
         ];
-
         const audioStorage = {};
-        let currentVoiceAudio = null;
-        let currentMusicAudio = null;
-        let mediaRecorder = null;
-        let audioChunks = [];
-
         const grid = document.getElementById('roster-grid');
-
         players.forEach((player, index) => {
-            audioStorage[index] = { voice: null, music: player.file };
-            
-            const savedVoice = localStorage.getItem('voice-' + index);
-            if (savedVoice) { audioStorage[index].voice = savedVoice; }
-
             const card = document.createElement('div');
             card.className = 'player-card';
-            card.innerHTML = `
-                <div class="player-name">${player.name}</div>
-                <button class="play-btn" onclick="playPlayer(${index})">🎵 Play Intro</button>
-                
-                <div style="margin-top: 15px; border-top: 1px solid #ffffff22; padding-top: 10px;">
-                    <button class="record-btn" id="rec-${index}" onclick="toggleRecord(${index})">🎙️ Record Voice</button>
-                    <span id="v-status-${index}" class="status-msg">${savedVoice ? '✅ Voice Saved' : ''}</span>
-                </div>
-            `;
+            card.innerHTML = `<div class="player-name">${player.name}</div><button class="play-btn" onclick="playAudio('${player.file}')">🎵 Play</button>`;
             grid.appendChild(card);
         });
-
-        function toggleRecord(index) {
-            const btn = document.getElementById(`rec-${index}`);
-            const status = document.getElementById(`v-status-${index}`);
-
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-                btn.innerText = "🎙️ Record Voice";
-                btn.classList.remove('recording');
-                return;
-            }
-
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-                
-                mediaRecorder.onstop = () => {
-                    const blob = new Blob(audioChunks, { type: 'audio/mp3' });
-                    const reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = function() {
-                        const base64data = reader.result;
-                        audioStorage[index].voice = base64data;
-                        localStorage.setItem('voice-' + index, base64data);
-                        status.innerText = "✅ Voice Saved";
-                    }
-                };
-
-                mediaRecorder.start();
-                btn.innerText = "🛑 Recording...";
-                btn.classList.add('recording');
-            }).catch(err => alert("Please allow microphone permissions to record intros."));
-        }
-
-        function playPlayer(index) {
+        function playAudio(file) {
             stopAll();
-            const data = audioStorage[index];
-            
-            if (data.voice) {
-                currentVoiceAudio = new Audio(data.voice);
-                currentVoiceAudio.play();
-                currentVoiceAudio.onended = function() {
-                    if (data.music) { playMusic(data.music); }
-                };
-            } else if (data.music) {
-                playMusic(data.music);
-            }
+            new Audio(file).play();
         }
-
-        function playMusic(file) {
-            // Standardizes encoding for spaces, ampersands, and literal brackets
-            let cleanPath = encodeURIComponent(file).replace(/%5B/g, '[').replace(/%5D/g, ']');
-            currentMusicAudio = new Audio(cleanPath);
-            currentMusicAudio.play().catch(e => console.log("Playback error: ", e));
-        }
-
         function stopAll() {
-            if (currentVoiceAudio) { currentVoiceAudio.pause(); currentVoiceAudio.currentTime = 0; }
-            if (currentMusicAudio) { currentMusicAudio.pause(); currentMusicAudio.currentTime = 0; }
+            location.reload();
         }
     </script>
 </body>

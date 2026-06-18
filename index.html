@@ -126,7 +126,7 @@
         }
 
         function playMusic(file) {
-            // Uses standard encoding while handling literal brackets smoothly
+            // Standardizes encoding for spaces, ampersands, and literal brackets
             let cleanPath = encodeURIComponent(file).replace(/%5B/g, '[').replace(/%5D/g, ']');
             currentMusicAudio = new Audio(cleanPath);
             currentMusicAudio.play().catch(e => console.log("Playback error: ", e));

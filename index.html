@@ -39,10 +39,10 @@
             { name: "Cruz Gouveia", file: "Zedd - Beautiful Now ft. Jon Bellion (Official Audio)-[AudioTrimmer.com].mp3" },
             { name: "Wes Hajsan", file: "Kevin Rudolf - Let It Rock - Ft. Lil' Wayne (HQ)(Explicit)-[AudioTrimmer.com].mp3" },
             { name: "Easton Healey", file: "Ok Blue Jays Song - Music Video-[AudioTrimmer.com].mp3" },
-            { name: "Carter Minamata", file: "Yin Yang (Pop Remix) - USSofficial (128k).mp3" },
+            { name: "Carter Minamata", file: "Yin Yang (Pop Remix) - USSofficial (128k)-[AudioTrimmer.com].mp3" },
             { name: "Isla Neller", file: "Grabbitz- My Cloud-[AudioTrimmer.com].mp3" },
             { name: "Conor Rouse", file: "illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3" },
-            { name: "Patrick Rouse", file: "%5BHardcore%5D - Stonebank - Stronger (feat. EMEL) %5BMonstercat Release%5D - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3" },
+            { name: "Patrick Rouse", file: "[Hardcore] - Stonebank - Stronger (feat. EMEL) [Monstercat Release] - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3" },
             { name: "Mila Royiwsky", file: "Denzel Curry, Gizzle, Bren Joy - Dynasties & Dystopia _ Arcane League of Legends _ Riot Games Music-[AudioTrimmer.com].mp3" },
             { name: "Ronan Royiwsky", file: "Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3" },
             { name: "Benjamin Sam", file: "Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3" }
@@ -126,9 +126,9 @@
         }
 
         function playMusic(file) {
-            // Fixes the web browser encoding issue for spaces, brackets, and ampersands automatically
-            let safePath = encodeURI(file).replace(/%255B/g, '%5B').replace(/%255D/g, '%5D');
-            currentMusicAudio = new Audio(safePath);
+            // Standardizes encoding for spaces, ampersands, and literal brackets
+            let cleanPath = encodeURIComponent(file).replace(/%5B/g, '[').replace(/%5D/g, ']');
+            currentMusicAudio = new Audio(cleanPath);
             currentMusicAudio.play().catch(e => console.log("Playback error: ", e));
         }
 

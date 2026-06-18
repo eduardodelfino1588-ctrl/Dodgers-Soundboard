@@ -39,7 +39,7 @@
             { name: "Cruz Gouveia", file: "Zedd - Beautiful Now ft. Jon Bellion (Official Audio)-[AudioTrimmer.com].mp3" },
             { name: "Wes Hajsan", file: "Kevin Rudolf - Let It Rock - Ft. Lil' Wayne (HQ)(Explicit)-[AudioTrimmer.com].mp3" },
             { name: "Easton Healey", file: "Ok Blue Jays Song - Music Video-[AudioTrimmer.com].mp3" },
-            { name: "Carter Minamata", file: "Yin Yang (Pop Remix) - USSofficial (128k).mp3" },
+            { name: "Carter Minamata", file: "Yin Yang (Pop Remix) - USSofficial (128k)-[AudioTrimmer.com].mp3" },
             { name: "Isla Neller", file: "Grabbitz- My Cloud-[AudioTrimmer.com].mp3" },
             { name: "Conor Rouse", file: "illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3" },
             { name: "Patrick Rouse", file: "[Hardcore] - Stonebank - Stronger (feat. EMEL) [Monstercat Release] - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3" },
@@ -126,7 +126,7 @@
         }
 
         function playMusic(file) {
-            // Decodes brackets seamlessly without breaking paths
+            // Uses standard encoding while handling literal brackets smoothly
             let cleanPath = encodeURIComponent(file).replace(/%5B/g, '[').replace(/%5D/g, ']');
             currentMusicAudio = new Audio(cleanPath);
             currentMusicAudio.play().catch(e => console.log("Playback error: ", e));

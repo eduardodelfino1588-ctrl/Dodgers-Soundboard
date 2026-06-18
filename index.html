@@ -42,7 +42,7 @@
             { name: "Carter Minamata", file: "Yin Yang (Pop Remix) - USSofficial (128k).mp3" },
             { name: "Isla Neller", file: "Grabbitz- My Cloud-[AudioTrimmer.com].mp3" },
             { name: "Conor Rouse", file: "illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3" },
-            { name: "Patrick Rouse", file: "%5BHardcore%5D - Stonebank - Stronger (feat. EMEL) %5BMonstercat Release%5D - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3" },
+            { name: "Patrick Rouse", file: "[Hardcore] - Stonebank - Stronger (feat. EMEL) [Monstercat Release] - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3" },
             { name: "Mila Royiwsky", file: "Denzel Curry, Gizzle, Bren Joy - Dynasties & Dystopia _ Arcane League of Legends _ Riot Games Music-[AudioTrimmer.com].mp3" },
             { name: "Ronan Royiwsky", file: "Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3" },
             { name: "Benjamin Sam", file: "Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3" }
@@ -118,16 +118,17 @@
                 currentVoiceAudio = new Audio(data.voice);
                 currentVoiceAudio.play();
                 currentVoiceAudio.onended = function() {
-                    if (data.music) { playMusicFile(data.music); }
+                    if (data.music) { playMusic(data.music); }
                 };
             } else if (data.music) {
-                playMusicFile(data.music);
+                playMusic(data.music);
             }
         }
 
-        function playMusicFile(file) {
-            // Raw string matching ensures the browser handles the %5B encoding flawlessly
-            currentMusicAudio = new Audio(file);
+        function playMusic(file) {
+            // Decodes brackets seamlessly without breaking paths
+            let cleanPath = encodeURIComponent(file).replace(/%5B/g, '[').replace(/%5D/g, ']');
+            currentMusicAudio = new Audio(cleanPath);
             currentMusicAudio.play().catch(e => console.log("Playback error: ", e));
         }
 

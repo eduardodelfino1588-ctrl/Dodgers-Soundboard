@@ -9,43 +9,238 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
         .card { background: #003366; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #ffffff33; }
         h3 { margin-top: 0; font-size: 1.3em; color: #fff; }
-        button { background-color: #ef3e42; color: white; border: none; padding: 12px 20px; margin: 8px 0; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; }
+        button { background-color: #ef3e42; color: white; border: none; padding: 12px 20px; margin: 5px 0; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; }
         button:hover { background-color: #cc292e; }
+        .record-btn { background-color: #4CAF50; font-size: 0.85em; padding: 8px; }
+        .record-btn:hover { background-color: #43a047; }
+        .recording { background-color: #ff5722 !important; animation: pulse 1s infinite; }
         .stop-btn { background-color: #333; margin-top: 30px; padding: 15px 40px; font-size: 1.3em; width: auto; border: 2px solid white; }
+        .status { font-size: 0.8em; color: #4CAF50; display: block; margin-top: 2px; height: 15px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <h1>⚾ Dodgers Walk-Up Soundboard ⚾</h1>
-    <p>Music tracks are permanently linked!</p>
+    <p>Music is locked in! Record intros right on your current device.</p>
 
     <div class="grid">
-        <div class="card"><h3>Christian Agius</h3><button onclick="playSong('The Hey Song-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Antonio Delfino</h3><button onclick="playSong('DMX - X Gon\' Give It To Ya-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Brayden Findlay</h3><button onclick="playSong('Wiz Khalifa - Black And Yellow [Official Music Video]-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Cruz Gouveia</h3><button onclick="playSong('Zedd - Beautiful Now ft. Jon Bellion (Official Audio)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Wes Hajsan</h3><button onclick="playSong('Kevin Rudolf - Let It Rock - Ft. Lil\' Wayne (HQ)(Explicit)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Easton Healey</h3><button onclick="playSong('Ok Blue Jays Song - Music Video-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Carter Minamata</h3><button onclick="playSong('Yin Yang (Pop Remix) - USSofficial (128k).mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Isla Neller</h3><button onclick="playSong('Grabbitz- My Cloud-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Conor Rouse</h3><button onclick="playSong('illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Patrick Rouse</h3><button onclick="playSong('%5BHardcore%5D - Stonebank - Stronger (feat. EMEL) %5BMonstercat Release%5D - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Mila Royiwsky</h3><button onclick="playSong('Denzel Curry, Gizzle, Bren Joy - Dynasties %26 Dystopia _ Arcane League of Legends _ Riot Games Music-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Ronan Royiwsky</h3><button onclick="playSong('Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3')">🎵 Play Intro</button></div>
-        <div class="card"><h3>Benjamin Sam</h3><button onclick="playSong('Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Christian Agius</h3><button onclick="playPlayer(0, 'The Hey Song-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-0" onclick="toggleRecord(0)">🎙️ Record Voice</button><span class="status" id="status-0"></span></div>
+        <div class="card"><h3>Antonio Delfino</h3><button onclick="playPlayer(1, 'DMX - X Gon\' Give It To Ya-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-1" onclick="toggleRecord(1)">🎙️ Record Voice</button><span class="status" id="status-1"></span></div>
+        <div class="card"><h3>Brayden Findlay</h3><button onclick="playPlayer(2, 'Wiz Khalifa - Black And Yellow [Official Music Video]-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-2" onclick="toggleRecord(2)">🎙️ Record Voice</button><span class="status" id="status-2"></span></div>
+        <div class="card"><h3>Cruz Gouveia</h3><button onclick="playPlayer(3, 'Zedd - Beautiful Now ft. Jon Bellion (Official Audio)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-3" onclick="toggleRecord(3)">🎙️ Record Voice</button><span class="status" id="status-3"></span></div>
+        <div class="card"><h3>Wes Hajsan</h3><button onclick="playPlayer(4, 'Kevin Rudolf - Let It Rock - Ft. Lil\' Wayne (HQ)(Explicit)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-4" onclick="toggleRecord(4)">🎙️ Record Voice</button><span class="status" id="status-4"></span></div>
+        <div class="card"><h3>Easton Healey</h3><button onclick="playPlayer(5, 'Ok Blue Jays Song - Music Video-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-5" onclick="toggleRecord(5)">🎙️ Record Voice</button><span class="status" id="status-5"></span></div>
+        <div class="card"><h3>Carter Minamata</h3><button onclick="playPlayer(6, 'Yin Yang (Pop Remix) - USSofficial (128k).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-6" onclick="toggleRecord(6)">🎙️ Record Voice</button><span class="status" id="status-6"></span></div>
+        <div class="card"><h3>Isla Neller</h3><button onclick="playPlayer(7, 'Grabbitz- My Cloud-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-7" onclick="toggleRecord(7)">🎙️ Record Voice</button><span class="status" id="status-7"></span></div>
+        <div class="card"><h3>Conor Rouse</h3><button onclick="playPlayer(8, 'illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-8" onclick="toggleRecord(8)">🎙️ Record Voice</button><span class="status" id="status-8"></span></div>
+        <div class="card"><h3>Patrick Rouse</h3><button onclick="playPlayer(9, '%5BHardcore%5D - Stonebank - Stronger (feat. EMEL) %5BMonstercat Release%5D - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-9" onclick="toggleRecord(9)">🎙️ Record Voice</button><span class="status" id="status-9"></span></div>
+        <div class="card"><h3>Mila Royiwsky</h3><button onclick="playPlayer(10, 'Denzel Curry, Gizzle, Bren Joy - Dynasties %26 Dystopia _ Arcane League of Legends _ Riot Games Music-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-10" onclick="toggleRecord(10)">🎙️ Record Voice</button><span class="status" id="status-10"></span></div>
+        <div class="card"><h3>Ronan Royiwsky</h3><button onclick="playPlayer(11, 'Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-11" onclick="toggleRecord(11)">🎙️ Record Voice</button><span class="status" id="status-11"></span></div>
+        <div class="card"><h3>Benjamin Sam</h3><button onclick="playPlayer(12, 'Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-12" onclick="toggleRecord(12)">🎙️ Record Voice</button><span class="status" id="status-12"></span></div>
     </div>
 
     <button class="stop-btn" onclick="stopAll()">🛑 STOP MUSIC</button>
 
     <script>
-        let currentAudio = null;
-        function playSong(fileName) {
-            if (currentAudio) { currentAudio.pause(); }
-            currentAudio = new Audio(fileName);
-            currentAudio.play().catch(e => console.log("Playback error: ", e));
+        let voiceStorage = {};
+        let currentVoice = null;
+        let currentMusic = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        // Automatically load saved voices from browser memory on startup
+        window.onload = function() {
+            for (let i = 0; i < 13; i++) {
+                const saved = localStorage.getItem('voice-' + i);
+                if (saved) {
+                    voiceStorage[i] = saved;
+                    document.getElementById('status-' + i).innerText = "✅ Intro Saved";
+                }
+            }
+        };
+
+        function toggleRecord(index) {
+            const btn = document.getElementById('rec-' + index);
+            const status = document.getElementById('status-' + index);
+
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                btn.innerText = "🎙️ Record Voice";
+                btn.classList.remove('recording');
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = function() {
+                        const base64data = reader.result;
+                        voiceStorage[index] = base64data;
+                        localStorage.setItem('voice-' + index, base64data);
+                        status.innerText = "✅ Intro Saved";
+                    }
+                };
+
+                mediaRecorder.start();
+                btn.innerText = "🛑 Recording...";
+                btn.classList.add('recording');
+            }).catch(err => alert("Please allow microphone permissions."));
         }
+
+        function playPlayer(index, musicFile) {
+            stopAll();
+            
+            // If there's a voice intro recorded, play it first!
+            if (voiceStorage[index]) {
+                currentVoice = new Audio(voiceStorage[index]);
+                currentVoice.play();
+                currentVoice.onended = function() {
+                    playMusic(musicFile);
+                };
+            } else {
+                // No voice recorded? Go straight to the music
+                playMusic(musicFile);
+            }
+        }
+
+        function playMusic(file) {
+            currentMusic = new Audio(file);
+            currentMusic.play().catch(e => console.log("Playback error: ", e));
+        }
+
         function stopAll() {
-            if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+            if (currentVoice) { currentVoice.pause(); currentVoice.currentTime = 0; }
+            if (currentMusic) { currentMusic.pause(); currentMusic.currentTime = 0; }
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodgers Smart Soundboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #005a9c; color: white; text-align: center; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .card { background: #003366; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #ffffff33; }
+        h3 { margin-top: 0; font-size: 1.3em; color: #fff; }
+        button { background-color: #ef3e42; color: white; border: none; padding: 12px 20px; margin: 5px 0; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; }
+        button:hover { background-color: #cc292e; }
+        .record-btn { background-color: #4CAF50; font-size: 0.85em; padding: 8px; }
+        .record-btn:hover { background-color: #43a047; }
+        .recording { background-color: #ff5722 !important; animation: pulse 1s infinite; }
+        .stop-btn { background-color: #333; margin-top: 30px; padding: 15px 40px; font-size: 1.3em; width: auto; border: 2px solid white; }
+        .status { font-size: 0.8em; color: #4CAF50; display: block; margin-top: 2px; height: 15px; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <h1>⚾ Dodgers Walk-Up Soundboard ⚾</h1>
+    <p>Music is locked in! Record intros right on your current device.</p>
+
+    <div class="grid">
+        <div class="card"><h3>Christian Agius</h3><button onclick="playPlayer(0, 'The Hey Song-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-0" onclick="toggleRecord(0)">🎙️ Record Voice</button><span class="status" id="status-0"></span></div>
+        <div class="card"><h3>Antonio Delfino</h3><button onclick="playPlayer(1, 'DMX - X Gon\' Give It To Ya-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-1" onclick="toggleRecord(1)">🎙️ Record Voice</button><span class="status" id="status-1"></span></div>
+        <div class="card"><h3>Brayden Findlay</h3><button onclick="playPlayer(2, 'Wiz Khalifa - Black And Yellow [Official Music Video]-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-2" onclick="toggleRecord(2)">🎙️ Record Voice</button><span class="status" id="status-2"></span></div>
+        <div class="card"><h3>Cruz Gouveia</h3><button onclick="playPlayer(3, 'Zedd - Beautiful Now ft. Jon Bellion (Official Audio)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-3" onclick="toggleRecord(3)">🎙️ Record Voice</button><span class="status" id="status-3"></span></div>
+        <div class="card"><h3>Wes Hajsan</h3><button onclick="playPlayer(4, 'Kevin Rudolf - Let It Rock - Ft. Lil\' Wayne (HQ)(Explicit)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-4" onclick="toggleRecord(4)">🎙️ Record Voice</button><span class="status" id="status-4"></span></div>
+        <div class="card"><h3>Easton Healey</h3><button onclick="playPlayer(5, 'Ok Blue Jays Song - Music Video-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-5" onclick="toggleRecord(5)">🎙️ Record Voice</button><span class="status" id="status-5"></span></div>
+        <div class="card"><h3>Carter Minamata</h3><button onclick="playPlayer(6, 'Yin Yang (Pop Remix) - USSofficial (128k).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-6" onclick="toggleRecord(6)">🎙️ Record Voice</button><span class="status" id="status-6"></span></div>
+        <div class="card"><h3>Isla Neller</h3><button onclick="playPlayer(7, 'Grabbitz- My Cloud-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-7" onclick="toggleRecord(7)">🎙️ Record Voice</button><span class="status" id="status-7"></span></div>
+        <div class="card"><h3>Conor Rouse</h3><button onclick="playPlayer(8, 'illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-8" onclick="toggleRecord(8)">🎙️ Record Voice</button><span class="status" id="status-8"></span></div>
+        <div class="card"><h3>Patrick Rouse</h3><button onclick="playPlayer(9, '%5BHardcore%5D - Stonebank - Stronger (feat. EMEL) %5BMonstercat Release%5D - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-9" onclick="toggleRecord(9)">🎙️ Record Voice</button><span class="status" id="status-9"></span></div>
+        <div class="card"><h3>Mila Royiwsky</h3><button onclick="playPlayer(10, 'Denzel Curry, Gizzle, Bren Joy - Dynasties %26 Dystopia _ Arcane League of Legends _ Riot Games Music-[AudioTrimmer.com].mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-10" onclick="toggleRecord(10)">🎙️ Record Voice</button><span class="status" id="status-10"></span></div>
+        <div class="card"><h3>Ronan Royiwsky</h3><button onclick="playPlayer(11, 'Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-11" onclick="toggleRecord(11)">🎙️ Record Voice</button><span class="status" id="status-11"></span></div>
+        <div class="card"><h3>Benjamin Sam</h3><button onclick="playPlayer(12, 'Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3')">🎵 Play Intro</button><button class="record-btn" id="rec-12" onclick="toggleRecord(12)">🎙️ Record Voice</button><span class="status" id="status-12"></span></div>
+    </div>
+
+    <button class="stop-btn" onclick="stopAll()">🛑 STOP MUSIC</button>
+
+    <script>
+        let voiceStorage = {};
+        let currentVoice = null;
+        let currentMusic = null;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        // Automatically load saved voices from browser memory on startup
+        window.onload = function() {
+            for (let i = 0; i < 13; i++) {
+                const saved = localStorage.getItem('voice-' + i);
+                if (saved) {
+                    voiceStorage[i] = saved;
+                    document.getElementById('status-' + i).innerText = "✅ Intro Saved";
+                }
+            }
+        };
+
+        function toggleRecord(index) {
+            const btn = document.getElementById('rec-' + index);
+            const status = document.getElementById('status-' + index);
+
+            if (mediaRecorder && mediaRecorder.state === "recording") {
+                mediaRecorder.stop();
+                btn.innerText = "🎙️ Record Voice";
+                btn.classList.remove('recording');
+                return;
+            }
+
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(audioChunks, { type: 'audio/mp3' });
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blob);
+                    reader.onloadend = function() {
+                        const base64data = reader.result;
+                        voiceStorage[index] = base64data;
+                        localStorage.setItem('voice-' + index, base64data);
+                        status.innerText = "✅ Intro Saved";
+                    }
+                };
+
+                mediaRecorder.start();
+                btn.innerText = "🛑 Recording...";
+                btn.classList.add('recording');
+            }).catch(err => alert("Please allow microphone permissions."));
+        }
+
+        function playPlayer(index, musicFile) {
+            stopAll();
+            
+            // If there's a voice intro recorded, play it first!
+            if (voiceStorage[index]) {
+                currentVoice = new Audio(voiceStorage[index]);
+                currentVoice.play();
+                currentVoice.onended = function() {
+                    playMusic(musicFile);
+                };
+            } else {
+                // No voice recorded? Go straight to the music
+                playMusic(musicFile);
+            }
+        }
+
+        function playMusic(file) {
+            currentMusic = new Audio(file);
+            currentMusic.play().catch(e => console.log("Playback error: ", e));
+        }
+
+        function stopAll() {
+            if (currentVoice) { currentVoice.pause(); currentVoice.currentTime = 0; }
+            if (currentMusic) { currentMusic.pause(); currentMusic.currentTime = 0; }
         }
     </script>
 </body>

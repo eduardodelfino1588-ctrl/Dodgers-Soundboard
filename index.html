@@ -118,16 +118,17 @@
                 currentVoiceAudio = new Audio(data.voice);
                 currentVoiceAudio.play();
                 currentVoiceAudio.onended = function() {
-                    if (data.music) { playMusicFile(data.music); }
+                    if (data.music) { playMusic(data.music); }
                 };
             } else if (data.music) {
-                playMusicFile(data.music);
+                playMusic(data.music);
             }
         }
 
-        function playMusicFile(file) {
-            // Raw string matching ensures the browser handles the %5B encoding flawlessly
-            currentMusicAudio = new Audio(file);
+        function playMusic(file) {
+            // Fixes the web browser encoding issue for spaces, brackets, and ampersands automatically
+            let safePath = encodeURI(file).replace(/%255B/g, '%5B').replace(/%255D/g, '%5D');
+            currentMusicAudio = new Audio(safePath);
             currentMusicAudio.play().catch(e => console.log("Playback error: ", e));
         }
 

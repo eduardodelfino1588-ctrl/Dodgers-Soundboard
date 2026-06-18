@@ -15,9 +15,6 @@
         .record-btn { background-color: #4CAF50; }
         .record-btn:hover { background-color: #43a047; }
         .recording { background-color: #ff5722 !important; }
-        .file-label { background-color: #444; display: block; padding: 10px; margin: 5px 0; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; text-align: center; }
-        .file-label:hover { background-color: #555; }
-        .file-input { display: none; }
         .status-msg { font-size: 0.85em; color: #ffeb3b; display: block; margin-top: 4px; font-weight: bold; min-height: 18px; }
         .controls-bar { position: sticky; bottom: 0; background-color: #002244; padding: 15px; margin-top: 40px; }
         .stop-btn { background-color: #222; border: 2px solid white; border-radius: 30px; width: auto; padding: 12px 40px; font-size: 1.2em; }
@@ -26,7 +23,7 @@
 <body>
 
     <h1>⚾ Dodgers Walk-Up Soundboard ⚾</h1>
-    <p>Setup your audio options directly on this device!</p>
+    <p>Music tracks are permanently linked to GitHub files!</p>
 
     <div class="grid-container" id="roster-grid"></div>
 
@@ -36,9 +33,19 @@
 
     <script>
         const players = [
-            "Christian Agius", "Antonio Delfino", "Brayden Findlay", "Cruz Gouveia", 
-            "Wes Hajsan", "Easton Healey", "Carter Minamata", "Isla Neller", 
-            "Conor Rouse", "Patrick Rouse", "Mila Royiwsky", "Ronan Royiwsky", "Benjamin Sam"
+            { name: "Christian Agius", file: "The Hey Song-[AudioTrimmer.com].mp3" },
+            { name: "Antonio Delfino", file: "DMX - X Gon' Give It To Ya-[AudioTrimmer.com].mp3" },
+            { name: "Brayden Findlay", file: "Wiz Khalifa - Black And Yellow [Official Music Video]-[AudioTrimmer.com].mp3" },
+            { name: "Cruz Gouveia", file: "Zedd - Beautiful Now ft. Jon Bellion (Official Audio)-[AudioTrimmer.com].mp3" },
+            { name: "Wes Hajsan", file: "Kevin Rudolf - Let It Rock - Ft. Lil' Wayne (HQ)(Explicit)-[AudioTrimmer.com].mp3" },
+            { name: "Easton Healey", file: "Ok Blue Jays Song - Music Video-[AudioTrimmer.com].mp3" },
+            { name: "Carter Minamata", file: "Yin Yang (Pop Remix) - USSofficial (128k).mp3" },
+            { name: "Isla Neller", file: "Grabbitz- My Cloud-[AudioTrimmer.com].mp3" },
+            { name: "Conor Rouse", file: "illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3" },
+            { name: "Patrick Rouse", file: "%5BHardcore%5D - Stonebank - Stronger (feat. EMEL) %5BMonstercat Release%5D - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3" },
+            { name: "Mila Royiwsky", file: "Denzel Curry, Gizzle, Bren Joy - Dynasties %26 Dystopia _ Arcane League of Legends _ Riot Games Music-[AudioTrimmer.com].mp3" },
+            { name: "Ronan Royiwsky", file: "Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3" },
+            { name: "Benjamin Sam", file: "Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3" }
         ];
 
         const audioStorage = {};
@@ -49,38 +56,25 @@
 
         const grid = document.getElementById('roster-grid');
 
-        players.forEach((name, index) => {
-            audioStorage[index] = { voice: null, music: null };
+        players.forEach((player, index) => {
+            audioStorage[index] = { voice: null, music: player.file };
             
-            // Load previously recorded voice if available
             const savedVoice = localStorage.getItem('voice-' + index);
             if (savedVoice) { audioStorage[index].voice = savedVoice; }
 
             const card = document.createElement('div');
             card.className = 'player-card';
             card.innerHTML = `
-                <div class="player-name">${name}</div>
+                <div class="player-name">${player.name}</div>
                 <button class="play-btn" onclick="playPlayer(${index})">🎵 Play Intro</button>
                 
                 <div style="margin-top: 15px; border-top: 1px solid #ffffff22; padding-top: 10px;">
                     <button class="record-btn" id="rec-${index}" onclick="toggleRecord(${index})">🎙️ Record Voice</button>
                     <span id="v-status-${index}" class="status-msg">${savedVoice ? '✅ Voice Saved' : ''}</span>
-                    
-                    <label class="file-label" for="file-${index}">📁 Choose Music File</label>
-                    <input type="file" id="file-${index}" class="file-input" accept="audio/*" onchange="handleMusicUpload(event, ${index})">
-                    <span id="m-status-${index}" class="status-msg"></span>
                 </div>
             `;
             grid.appendChild(card);
         });
-
-        function handleMusicUpload(event, index) {
-            const file = event.target.files[0];
-            if (file) {
-                audioStorage[index].music = URL.createObjectURL(file);
-                document.getElementById(`m-status-${index}`).innerText = "✅ Music Loaded";
-            }
-        }
 
         function toggleRecord(index) {
             const btn = document.getElementById(`rec-${index}`);

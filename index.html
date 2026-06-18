@@ -5,249 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dodgers Smart Soundboard</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #005A9C; /* Dodger Blue */
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-        }
-        h1 { margin-bottom: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
-        .subtitle { margin-top: 0; margin-bottom: 25px; color: #e0e0e0; }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-        .player-card {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 2px solid #ffffff33;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .player-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 12px;
-        }
-        .play-btn {
-            background-color: #EF3E42; /* Dodger Red */
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.2s, transform 0.1s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-        .play-btn:hover { background-color: #d32f2f; }
-        .play-btn:active { transform: scale(0.98); }
-        .play-btn:disabled { background-color: #555; cursor: not-allowed; opacity: 0.6; }
-        
-        .setup-zone {
-            margin-top: 15px;
-            width: 100%;
-            border-top: 1px solid #ffffff22;
-            padding-top: 10px;
-            font-size: 12px;
-            text-align: left;
-        }
-        .setup-label { font-weight: bold; color: #ffeb3b; display: block; margin-bottom: 5px; }
-        .file-input { display: none; }
-        .file-label {
-            background: #444;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-        .file-label:hover { background: #555; }
-        .record-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .record-btn.recording { background-color: #ff5722; animation: pulse 1s infinite; }
-        
-        .controls-bar {
-            position: sticky;
-            bottom: 0;
-            background-color: #003366;
-            padding: 15px;
-            margin-top: 40px;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
-        }
-        .stop-btn {
-            background-color: #222;
-            color: white;
-            border: 2px solid white;
-            padding: 12px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 30px;
-            cursor: pointer;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+        body { font-family: Arial, sans-serif; background-color: #005a9c; color: white; text-align: center; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .card { background: #003366; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #ffffff33; }
+        h3 { margin-top: 0; font-size: 1.3em; color: #fff; }
+        button { background-color: #ef3e42; color: white; border: none; padding: 12px 20px; margin: 8px 0; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; }
+        button:hover { background-color: #cc292e; }
+        .stop-btn { background-color: #333; margin-top: 30px; padding: 15px 40px; font-size: 1.3em; width: auto; border: 2px solid white; }
     </style>
 </head>
 <body>
 
     <h1>⚾ Dodgers Walk-Up Soundboard ⚾</h1>
-    <p class="subtitle">Assign music, record announcements, and play them instantly!</p>
+    <p>Music tracks are permanently linked!</p>
 
-    <div class="grid-container" id="roster-grid"></div>
-
-    <div class="controls-bar">
-        <button class="stop-btn" onclick="stopAll()">🛑 STOP MUSIC</button>
+    <div class="grid">
+        <div class="card"><h3>Christian Agius</h3><button onclick="playSong('The Hey Song-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Antonio Delfino</h3><button onclick="playSong('DMX - X Gon\' Give It To Ya-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Brayden Findlay</h3><button onclick="playSong('Wiz Khalifa - Black And Yellow [Official Music Video]-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Cruz Gouveia</h3><button onclick="playSong('Zedd - Beautiful Now ft. Jon Bellion (Official Audio)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Wes Hajsan</h3><button onclick="playSong('Kevin Rudolf - Let It Rock - Ft. Lil\' Wayne (HQ)(Explicit)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Easton Healey</h3><button onclick="playSong('Ok Blue Jays Song - Music Video-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Carter Minamata</h3><button onclick="playSong('Yin Yang (Pop Remix) - USSofficial (128k).mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Isla Neller</h3><button onclick="playSong('Grabbitz- My Cloud-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Conor Rouse</h3><button onclick="playSong('illScarlett - Clearer Now (Official Audio) - illscarlettVEVO (128k).mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Patrick Rouse</h3><button onclick="playSong('%5BHardcore%5D - Stonebank - Stronger (feat. EMEL) %5BMonstercat Release%5D - Monstercat Uncaged (128k)-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Mila Royiwsky</h3><button onclick="playSong('Denzel Curry, Gizzle, Bren Joy - Dynasties %26 Dystopia _ Arcane League of Legends _ Riot Games Music-[AudioTrimmer.com].mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Ronan Royiwsky</h3><button onclick="playSong('Yin Yang (Pop Remix) - USSofficial (128k)-(1).mp3')">🎵 Play Intro</button></div>
+        <div class="card"><h3>Benjamin Sam</h3><button onclick="playSong('Grabbitz- My Cloud-[AudioTrimmer.com] (1).mp3')">🎵 Play Intro</button></div>
     </div>
 
+    <button class="stop-btn" onclick="stopAll()">🛑 STOP MUSIC</button>
+
     <script>
-        const players = [
-            "Christian Agius", "Antonio Delfino", "Brayden Findlay", "Cruz Gouveia", 
-            "Wes Hajsan", "Easton Healey", "Carter Minamata", "Isla Neller", 
-            "Conor Rouse", "Patrick Rouse", "Mila Royiwsky", "Ronan Royiwsky", "Benjamin Sam"
-        ];
-
-        const audioStorage = {};
-        let currentVoiceAudio = null;
-        let currentMusicAudio = null;
-        let mediaRecorder = null;
-        let audioChunks = [];
-
-        const grid = document.getElementById('roster-grid');
-
-        // Generate the player cards dynamically
-        players.forEach((name, index) => {
-            audioStorage[index] = { voice: null, music: null };
-            
-            const card = document.createElement('div');
-            card.className = 'player-card';
-            card.innerHTML = `
-                <div class="player-name">${name}</div>
-                <button class="play-btn" id="play-${index}" onclick="playPlayer(${index})" disabled>🎵 Play Intro</button>
-                
-                <div class="setup-zone">
-                    <span class="setup-label">⚙️ Setup Audio:</span>
-                    <!-- Voice Recording -->
-                    <button class="record-btn" id="rec-${index}" onclick="toggleRecord(${index})">🎙️ Record Intro Voice</button>
-                    <span id="status-rec-${index}" style="margin-left:5px; color:#4CAF50;"></span>
-                    <div style="margin-top: 8px;">
-                        <!-- Music Upload -->
-                        <label class="file-label" for="file-${index}">📁 Choose Music File</label>
-                        <input type="file" id="file-${index}" class="file-input" accept="audio/*" onchange="handleMusicUpload(event, ${index})">
-                        <span id="status-music-${index}" style="margin-left:5px; color:#4CAF50;"></span>
-                    </div>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-
-        // Handle Music file upload
-        function handleMusicUpload(event, index) {
-            const file = event.target.files[0];
-            if (file) {
-                audioStorage[index].music = URL.createObjectURL(file);
-                document.getElementById(`status-music-${index}`).innerText = "✅ Loaded";
-                checkReady(index);
-            }
+        let currentAudio = null;
+        function playSong(fileName) {
+            if (currentAudio) { currentAudio.pause(); }
+            currentAudio = new Audio(fileName);
+            currentAudio.play().catch(e => console.log("Playback error: ", e));
         }
-
-        // Voice Recording Logic
-        function toggleRecord(index) {
-            const btn = document.getElementById(`rec-${index}`);
-            const status = document.getElementById(`status-rec-${index}`);
-            
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-                mediaRecorder.stop();
-                btn.innerText = "🎙️ Record Intro Voice";
-                btn.classList.remove('recording');
-                return;
-            }
-
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(stream => {
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-                    
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
-
-                    mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                        audioStorage[index].voice = URL.createObjectURL(audioBlob);
-                        status.innerText = "✅ Recorded";
-                        checkReady(index);
-                    };
-
-                    mediaRecorder.start();
-                    btn.innerText = "🛑 Recording... Tap to Stop";
-                    btn.classList.add('recording');
-                }).catch(err => {
-                    alert("Microphone access denied or not supported. Please allow microphone permissions.");
-                });
-        }
-
-        // Enable play button if either audio is present
-        function checkReady(index) {
-            if (audioStorage[index].voice || audioStorage[index].music) {
-                document.getElementById(`play-${index}`).disabled = false;
-            }
-        }
-
-        // Playback sequence: Voice Intros first, then immediately triggers the song
-        function playPlayer(index) {
-            stopAll();
-            
-            const data = audioStorage[index];
-            
-            if (data.voice) {
-                currentVoiceAudio = new Audio(data.voice);
-                currentVoiceAudio.play();
-                
-                // When your voice introduction finishes, start the music automatically!
-                currentVoiceAudio.onended = () => {
-                    if (data.music) {
-                        currentMusicAudio = new Audio(data.music);
-                        currentMusicAudio.play();
-                    }
-                };
-            } else if (data.music) {
-                currentMusicAudio = new Audio(data.music);
-                currentMusicAudio.play();
-            }
-        }
-
-        // Master Stop Button
         function stopAll() {
-            if (currentVoiceAudio) {
-                currentVoiceAudio.pause();
-                currentVoiceAudio.currentTime = 0;
-            }
-            if (currentMusicAudio) {
-                currentMusicAudio.pause();
-                currentMusicAudio.currentTime = 0;
-            }
+            if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
         }
     </script>
 </body>

@@ -5,30 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dodgers Smart Soundboard</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #005a9c; color: white; text-align: center; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .card { background: #003366; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #ffffff33; text-align: center; }
-        h3 { margin-top: 0; font-size: 1.3em; color: #fff; margin-bottom: 10px; }
-        button { background-color: #ef3e42; color: white; border: none; padding: 10px 15px; margin: 5px 0; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; }
-        button:hover { background-color: #cc292e; }
-        .file-label { background-color: #444; display: block; padding: 8px; margin: 5px 0; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; }
-        .file-label:hover { background-color: #555; }
-        .file-input { display: none; }
+        body { font-family: Arial, sans-serif; background-color: #005a9c; color: white; text-align: center; padding: 20px; margin: 0; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .player-card { background: #003366; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 2px solid #ffffff33; text-align: center; }
+        .player-name { font-size: 1.3em; font-weight: bold; margin-bottom: 12px; }
+        button { color: white; border: none; padding: 12px 20px; margin: 5px 0; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; }
+        .play-btn { background-color: #ef3e42; }
+        .play-btn:hover { background-color: #cc292e; }
         .record-btn { background-color: #4CAF50; }
         .record-btn:hover { background-color: #43a047; }
         .recording { background-color: #ff5722 !important; }
-        .stop-btn { background-color: #333; margin-top: 30px; padding: 15px 40px; font-size: 1.3em; width: auto; border: 2px solid white; }
-        .status { font-size: 0.85em; color: #4CAF50; display: block; margin-top: 4px; font-weight: bold; }
+        .file-label { background-color: #444; display: block; padding: 10px; margin: 5px 0; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9em; text-align: center; }
+        .file-label:hover { background-color: #555; }
+        .file-input { display: none; }
+        .status-msg { font-size: 0.85em; color: #ffeb3b; display: block; margin-top: 4px; font-weight: bold; min-height: 18px; }
+        .controls-bar { position: sticky; bottom: 0; background-color: #002244; padding: 15px; margin-top: 40px; }
+        .stop-btn { background-color: #222; border: 2px solid white; border-radius: 30px; width: auto; padding: 12px 40px; font-size: 1.2em; }
     </style>
 </head>
 <body>
 
     <h1>⚾ Dodgers Walk-Up Soundboard ⚾</h1>
-    <p>Link your music tracks and record your voice intros below!</p>
+    <p>Setup your audio options directly on this device!</p>
 
-    <div class="grid" id="roster"></div>
+    <div class="grid-container" id="roster-grid"></div>
 
-    <button class="stop-btn" onclick="stopAll()">🛑 STOP MUSIC</button>
+    <div class="controls-bar">
+        <button class="stop-btn" onclick="stopAll()">🛑 STOP MUSIC</button>
+    </div>
 
     <script>
         const players = [
@@ -37,37 +41,40 @@
             "Conor Rouse", "Patrick Rouse", "Mila Royiwsky", "Ronan Royiwsky", "Benjamin Sam"
         ];
 
-        let audioStorage = {};
-        let currentVoice = null;
-        let currentMusic = null;
+        const audioStorage = {};
+        let currentVoiceAudio = null;
+        let currentMusicAudio = null;
         let mediaRecorder = null;
         let audioChunks = [];
 
-        const rosterGrid = document.getElementById('roster');
+        const grid = document.getElementById('roster-grid');
 
         players.forEach((name, index) => {
             audioStorage[index] = { voice: null, music: null };
             
-            // Load saved voice from storage if it exists
+            // Load previously recorded voice if available
             const savedVoice = localStorage.getItem('voice-' + index);
             if (savedVoice) { audioStorage[index].voice = savedVoice; }
 
             const card = document.createElement('div');
-            card.className = 'card';
+            card.className = 'player-card';
             card.innerHTML = `
-                <h3>${name}</h3>
-                <button onclick="playPlayer(${index})">🎵 Play Intro</button>
-                <button class="record-btn" id="rec-${index}" onclick="toggleRecord(${index})">🎙️ Record Voice</button>
-                <span class="status" id="v-status-${index}">${savedVoice ? '✅ Voice Saved' : ''}</span>
+                <div class="player-name">${name}</div>
+                <button class="play-btn" onclick="playPlayer(${index})">🎵 Play Intro</button>
                 
-                <label class="file-label" for="file-${index}">📁 Choose Music File</label>
-                <input type="file" id="file-${index}" class="file-input" accept="audio/*" onchange="handleMusic(${index}, event)">
-                <span class="status" id="m-status-${index}"></span>
+                <div style="margin-top: 15px; border-top: 1px solid #ffffff22; padding-top: 10px;">
+                    <button class="record-btn" id="rec-${index}" onclick="toggleRecord(${index})">🎙️ Record Voice</button>
+                    <span id="v-status-${index}" class="status-msg">${savedVoice ? '✅ Voice Saved' : ''}</span>
+                    
+                    <label class="file-label" for="file-${index}">📁 Choose Music File</label>
+                    <input type="file" id="file-${index}" class="file-input" accept="audio/*" onchange="handleMusicUpload(event, ${index})">
+                    <span id="m-status-${index}" class="status-msg"></span>
+                </div>
             `;
-            rosterGrid.appendChild(card);
+            grid.appendChild(card);
         });
 
-        function handleMusic(index, event) {
+        function handleMusicUpload(event, index) {
             const file = event.target.files[0];
             if (file) {
                 audioStorage[index].music = URL.createObjectURL(file);
@@ -76,8 +83,8 @@
         }
 
         function toggleRecord(index) {
-            const btn = document.getElementById('rec-' + index);
-            const status = document.getElementById('v-status-' + index);
+            const btn = document.getElementById(`rec-${index}`);
+            const status = document.getElementById(`v-status-${index}`);
 
             if (mediaRecorder && mediaRecorder.state === "recording") {
                 mediaRecorder.stop();
@@ -106,28 +113,28 @@
                 mediaRecorder.start();
                 btn.innerText = "🛑 Recording...";
                 btn.classList.add('recording');
-            }).catch(err => alert("Microphone permissions required."));
+            }).catch(err => alert("Please allow microphone permissions to record intros."));
         }
 
         function playPlayer(index) {
             stopAll();
-            const player = audioStorage[index];
+            const data = audioStorage[index];
             
-            if (player.voice) {
-                currentVoice = new Audio(player.voice);
-                currentVoice.play();
-                currentVoice.onended = function() {
-                    if (player.music) { currentMusic = new Audio(player.music); currentMusic.play(); }
+            if (data.voice) {
+                currentVoiceAudio = new Audio(data.voice);
+                currentVoiceAudio.play();
+                currentVoiceAudio.onended = function() {
+                    if (data.music) { currentMusicAudio = new Audio(data.music); currentMusicAudio.play(); }
                 };
-            } else if (player.music) {
-                currentMusic = new Audio(player.music);
-                currentMusic.play();
+            } else if (data.music) {
+                currentMusicAudio = new Audio(data.music);
+                currentMusicAudio.play();
             }
         }
 
         function stopAll() {
-            if (currentVoice) { currentVoice.pause(); currentVoice.currentTime = 0; }
-            if (currentMusic) { currentMusic.pause(); currentMusic.currentTime = 0; }
+            if (currentVoiceAudio) { currentVoiceAudio.pause(); currentVoiceAudio.currentTime = 0; }
+            if (currentMusicAudio) { currentMusicAudio.pause(); currentMusicAudio.currentTime = 0; }
         }
     </script>
 </body>
